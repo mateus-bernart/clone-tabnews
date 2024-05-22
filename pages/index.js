@@ -1,5 +1,5 @@
 function Home() {
-  return <h1>Eu amo a joanna troc ❤️</h1>;
+  return <h1>Eu amo a Joanna Troc ❤️</h1>;
 }
 
 function teste() {
