@@ -15,6 +15,7 @@ async function status(request, response) {
     text: query,
     values: [databaseName],
   });
+
   result_query.rows.forEach((row) => {
     postgres_info.postgres_version = row.postgres_version;
     postgres_info.max_connections = row.max_connections;
