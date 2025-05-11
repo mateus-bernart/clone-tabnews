@@ -5,6 +5,11 @@ import { join } from "node:path";
 export default async function migrations(request, response) {
   const dbClient = await database.getNewClient();
 
+  if (request.method !== "GET" && request.method !== "POST") {
+    await dbClient.end();
+    return response.status(405).json({ error: "Method not allowed" });
+  }
+
   const defaultMigationOptions = {
     dbClient: dbClient,
     dryRun: false,
