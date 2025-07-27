@@ -5,6 +5,7 @@ async function query(queryObject) {
     client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
+    // eslint-disable-next-line
   } catch (error) {
     throw error;
   } finally {
@@ -29,4 +30,5 @@ export const getNewClient = async () => {
   return client;
 };
 
-export default { query, getNewClient };
+const database = { query, getNewClient };
+export default database;
