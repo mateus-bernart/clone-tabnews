@@ -1,19 +1,16 @@
 import { Client } from "pg";
 async function query(queryObject) {
   let client;
+
   try {
     client = await getNewClient();
     const result = await client.query(queryObject);
     return result;
-    // eslint-disable-next-line
   } catch (error) {
+    console.log("\n Erro dentro do catch do database.js \n", error);
     throw error;
   } finally {
-    if (client) {
-      await client.end().catch((err) => {
-        console.error("Error closing the connection", err);
-      });
-    }
+    await client?.end();
   }
 }
 
