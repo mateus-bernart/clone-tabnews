@@ -1,10 +1,6 @@
 import { createRouter } from "next-connect";
-import database from "infra/database";
-import migrationRunner from "node-pg-migrate";
-import { resolve } from "node:path";
 import controller from "infra/controller";
-
-let dbClient;
+import migrator from "models/migrator";
 
 const router = createRouter();
 
@@ -13,45 +9,17 @@ router.post(postHandler);
 
 export default router.handler(controller.errorHandlers);
 
-const defaultMigationOptions = {
-  dryRun: false,
-  dir: resolve("infra", "migrations"),
-  direction: "up",
-  verbose: true,
-  migrationsTable: "pgmigrations",
-};
-
 async function getHandler(request, response) {
-  dbClient = await database.getNewClient();
-
-  try {
-    const pendingMigrations = await migrationRunner({
-      ...defaultMigationOptions,
-      dbClient,
-    });
-
-    return response.status(200).json(pendingMigrations);
-  } finally {
-    await dbClient.end();
-  }
+  const pendingMigrations = await migrator.listPendingMigrations();
+  return response.status(200).json(pendingMigrations);
 }
 
 async function postHandler(request, response) {
-  dbClient = await database.getNewClient();
+  const migratedMigrations = await migrator.runPendingMigrations();
 
-  try {
-    const migratedMigrations = await migrationRunner({
-      ...defaultMigationOptions,
-      dbClient,
-      dryRun: false,
-    });
-
-    if (migratedMigrations.length > 0) {
-      return response.status(201).json(migratedMigrations);
-    }
-
-    return response.status(200).json(migratedMigrations);
-  } finally {
-    await dbClient.end();
+  if (migratedMigrations.length > 0) {
+    return response.status(201).json(migratedMigrations);
   }
+
+  return response.status(200).json(migratedMigrations);
 }
