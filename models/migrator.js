@@ -7,7 +7,7 @@ const defaultMigationOptions = {
   dryRun: false,
   dir: resolve("infra", "migrations"),
   direction: "up",
-  verbose: true,
+  log: () => {}, //enviar logs para nenhum lugar.
   migrationsTable: "pgmigrations",
 };
 
