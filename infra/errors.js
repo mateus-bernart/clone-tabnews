@@ -23,6 +23,7 @@ export class ServiceError extends Error {
     super(message || "Serviço indisponível no momento.", {
       cause,
     });
+
     this.name = "ServiceError";
     this.action = "Verifique se o serviço está disponível.";
     this.statusCode = 503;
@@ -44,6 +45,27 @@ export class MethodNotAllowedError extends Error {
     this.name = "MethodNotAllowedError";
     this.action = "Verifique se o método HTTP é válido para este endpoint.";
     this.statusCode = 405;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class ValidationError extends Error {
+  constructor({ cause, message }) {
+    super(message, {
+      cause,
+    });
+
+    this.name = "ValidationError";
+    this.action = "Verifique as informações inseridas.";
+    this.statusCode = 400;
   }
 
   toJSON() {
