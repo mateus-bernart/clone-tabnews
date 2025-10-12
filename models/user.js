@@ -74,8 +74,7 @@ async function create(userInputValues) {
     if (results.rowCount > 0) {
       throw new ValidationError({
         message: "O email informado já está sendo utilizado.",
-        action:
-          "Utilize outro email para realizar o cadastro.",
+        action: "Utilize outro email para realizar o cadastro.",
       });
     }
   }
