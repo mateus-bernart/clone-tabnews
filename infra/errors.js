@@ -19,13 +19,14 @@ export class InternalServerError extends Error {
 }
 
 export class ServiceError extends Error {
-  constructor({ cause, message }) {
+  constructor({ cause, message, action }) {
     super(message || "Serviço indisponível no momento.", {
       cause,
+      action,
     });
 
     this.name = "ServiceError";
-    this.action = "Verifique se o serviço está disponível.";
+    this.action = action || "Verifique se o serviço está disponível.";
     this.statusCode = 503;
   }
 
@@ -58,14 +59,41 @@ export class MethodNotAllowedError extends Error {
 }
 
 export class ValidationError extends Error {
-  constructor({ cause, message }) {
+  constructor({ cause, message, action }) {
     super(message, {
       cause,
+      action,
     });
 
     this.name = "ValidationError";
-    this.action = "Verifique as informações inseridas.";
+    this.action = action || "Verifique as informações inseridas.";
     this.statusCode = 400;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      message: this.message,
+      action: this.action,
+      status_code: this.statusCode,
+    };
+  }
+}
+
+export class NotFoundError extends Error {
+  constructor({ cause, message, action }) {
+    super(
+      message || "Não foi possível encontrar este nome de usuário no sistema",
+      {
+        cause,
+      },
+      action,
+    );
+
+    this.name = "NotFoundError";
+    this.action =
+      action || "Verifique se os parâmetros enviados na consulta estão certos.";
+    this.statusCode = 404;
   }
 
   toJSON() {
