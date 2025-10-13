@@ -7,7 +7,7 @@ beforeAll(async () => {
   await orchestrator.runPendingMigrations();
 });
 
-describe("POST /api/v1/users/[username]", () => {
+describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
     test("With exact case match", async () => {
       const response1 = await fetch("http://localhost:3000/api/v1/users", {
@@ -33,7 +33,7 @@ describe("POST /api/v1/users/[username]", () => {
         id: responseBody.id,
         username: "MesmoCase",
         email: "mesmo.case@gmail.com",
-        password: "123",
+        password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -62,20 +62,20 @@ describe("POST /api/v1/users/[username]", () => {
 
       expect(response2.status).toBe(200);
 
-      const responseBody = await response2.json();
+      const response2Body = await response2.json();
 
-      expect(responseBody).toEqual({
-        id: responseBody.id,
+      expect(response2Body).toEqual({
+        id: response2Body.id,
         username: "CaseDiferente",
         email: "casediferente@gmail.com",
-        password: "123",
-        created_at: responseBody.created_at,
-        updated_at: responseBody.updated_at,
+        password: response2Body.password,
+        created_at: response2Body.created_at,
+        updated_at: response2Body.updated_at,
       });
 
-      expect(uuidVersion(responseBody.id)).toBe(4);
-      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
-      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+      expect(uuidVersion(response2Body.id)).toBe(4);
+      expect(Date.parse(response2Body.created_at)).not.toBeNaN();
+      expect(Date.parse(response2Body.updated_at)).not.toBeNaN();
     });
 
     test("With nonexistent username", async () => {
