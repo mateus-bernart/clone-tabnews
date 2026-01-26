@@ -2,7 +2,6 @@ import { createRouter } from "next-connect";
 import controller from "infra/controller";
 import session from "models/session";
 import user from "models/user";
-import { UnauthorizedError } from "infra/errors";
 
 const router = createRouter();
 
@@ -16,7 +15,7 @@ async function getHandler(request, response) {
   const sessionObject = await session.findOneValidByToken(sessionToken);
   const renewedSessionObject = await session.renew(sessionObject.id);
   await controller.setSessionCookie(renewedSessionObject.token, response);
-  
+
   const userFound = await user.findOneById(sessionObject.user_id);
 
   return response.status(200).json(userFound);
