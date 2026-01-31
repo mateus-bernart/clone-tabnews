@@ -129,8 +129,7 @@ describe("GET /api/v1/users", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const minute = 60 * 1000;
-      jest.advanceTimersByTime(session.EXPIRATION_IN_MILLISECONDS + minute);
+      jest.useRealTimers();
 
       const response = await fetch(`http://localhost:3000/api/v1/user`, {
         headers: {
@@ -148,8 +147,6 @@ describe("GET /api/v1/users", () => {
         action: "Verifique se este usuário está logado e tente novamente.",
         status_code: 401,
       });
-
-      jest.useRealTimers();
     });
   });
 });
