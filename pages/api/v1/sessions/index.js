@@ -6,6 +6,7 @@ import session from "models/session";
 const router = createRouter();
 
 router.post(postHandler);
+router.delete(deleteHandler);
 
 export default router.handler(controller.errorHandlers);
 
