@@ -39,7 +39,15 @@ describe("Use case: Registration Flow (all successful)", () => {
     });
   });
 
-  test("Receive email confirmation", () => {});
+  test("Receive email confirmation", async () => {
+    const lastEmail = await orchestrator.getLastEmail();
+
+    expect(lastEmail.sender).toBe("<contato@fintab.com.br>");
+    expect(lastEmail.recipients[0]).toBe("<registration.flow@curso.dev>");
+    expect(lastEmail.subject).toBe("Ative seu cadastro!");
+    expect(lastEmail.text).toContain("RegistrationFlow");
+  });
+
   test("Activate account", () => {});
   test("Login", () => {});
   test("Get user information", () => {});
