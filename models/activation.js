@@ -27,19 +27,21 @@ async function create(userId) {
   }
 }
 
-async function findOneByUserId(userId) {
-  const newtoken = await runSelectQuery(userId);
-  return newtoken;
+async function findOneValidById(tokenId) {
+  const tokenObject = await runSelectQuery(tokenId);
+  return tokenObject;
 
-  async function runSelectQuery(userId) {
+  async function runSelectQuery(tokenId) {
     const results = await database.query({
       text: `
         SELECT * 
         FROM user_activation_tokens
-        WHERE user_id = $1 
+        WHERE id = $1
+        AND expires_at > NOW()
+        AND used_at IS NULL
         LIMIT 1
       ;`,
-      values: [userId],
+      values: [tokenId],
     });
 
     return results.rows[0];
@@ -64,7 +66,7 @@ Equipe FinTab.
 const activation = {
   sendEmailToUser,
   create,
-  findOneByUserId,
+  findOneValidById,
 };
 
 export default activation;
