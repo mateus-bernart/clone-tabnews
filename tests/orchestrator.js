@@ -101,6 +101,6 @@ const orchestrator = {
   createSession,
   deleteAllEmails,
   getLastEmail,
-  extractUUID
+  extractUUID,
 };
 export default orchestrator;
