@@ -75,8 +75,6 @@ describe("Use case: Registration Flow (all successful)", () => {
 
     const activationResponseBody = await activationResponse.json();
 
-    console.log(activationResponseBody);
-
     expect(Date.parse(activationResponseBody.used_at)).not.toBeNaN();
 
     const activatedUser = await user.findOneById(
@@ -86,6 +84,26 @@ describe("Use case: Registration Flow (all successful)", () => {
     expect(activatedUser.features).toEqual(["create:session"]);
   });
 
-  test("Login", async () => {});
+  test("Login", async () => {
+    const createSessionResponse = await fetch(
+      "http://localhost:3000/api/v1/sessions",
+      {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          username: "RegistrationFlow",
+          email: "registration.flow@curso.dev",
+          password: "1234",
+        }),
+      },
+    );
+
+    expect(createSessionResponse.status).toBe(201);
+
+    const createSessionResponseBody = await createSessionResponse.json();
+    
+    expect(createSessionResponseBody.user_id).toBe(createdUserResponseBody.id);
+  });
+
   test("Get user information", async () => {});
 });
