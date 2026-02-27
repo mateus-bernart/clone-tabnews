@@ -66,6 +66,7 @@ async function deleteAllEmails() {
     headers: { "Content-type": "application/json" },
   });
 }
+
 async function getLastEmail() {
   const emailListResponse = await fetch(`${emailHttpUrl}/messages`, {
     method: "GET",
@@ -95,7 +96,7 @@ function extractUUID(text) {
 }
 
 async function activateUser(inactiveUser) {
-  await activation.activateUserByUserId(inactiveUser.id);
+  return await activation.activateUserByUserId(inactiveUser.id);
 }
 
 const orchestrator = {
