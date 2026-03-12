@@ -107,7 +107,7 @@ describe("Use case: Registration Flow (all successful)", () => {
   });
 
   test("Get user information", async () => {
-    const inactiveUserCreated = await orchestrator.createUser();
+    await orchestrator.createUser();
 
     const inactiveUserResponse = await fetch(
       `http://localhost:3000/api/v1/user`,
