@@ -19,6 +19,7 @@ describe("POST /api/v1/users", () => {
           username: "mateusbernart",
           email: "mateusbernart14@gmail.com",
           password: "123",
+          features: ["create:user"],
         }),
       });
 
@@ -29,7 +30,7 @@ describe("POST /api/v1/users", () => {
         id: responseBody.id,
         username: "mateusbernart",
         email: "mateusbernart14@gmail.com",
-        features: ["read:activation_token"],
+        features: ["read:activation_token", "create:user"],
         password: responseBody.password,
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
